@@ -1,17 +1,12 @@
 import { Request, Response } from 'express';
-import jwt from 'jsonwebtoken';
 
 import { appDataSource } from '../data-source';
 import { Token } from '../entity';
-import { config } from '../config';
+import { tokenService } from '../services/token.service';
 
 class TokenController {
-    async getToken(req: Request, res: Response) {
-        const accessToken = jwt.sign(
-            { payload: new Date().getMilliseconds() },
-            config.SECRET_KEY as string,
-            { expiresIn: '1d' },
-        );
+    public async getToken(req: Request, res: Response) {
+        const accessToken = await tokenService.getToken();
 
         await appDataSource.createQueryBuilder()
             .insert()

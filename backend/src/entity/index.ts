@@ -1,3 +1,4 @@
 export * from './Users';
 export * from './Token';
-export * from './CommonFields';
+export * from './CommonField';
+export * from './Positions';

@@ -1,12 +1,20 @@
-import { Column, Entity } from 'typeorm';
-import { CommonFields, ICommonFields } from './CommonFields';
+import { Column, CreateDateColumn, Entity } from 'typeorm';
 
-export interface IToken extends ICommonFields {
+import { CommonField, ICommonField } from './CommonField';
+
+export interface IToken extends ICommonField {
     accessToken: string;
+    registration_timestamp: string
 }
 
-@Entity()
-export class Token extends CommonFields implements IToken {
+@Entity('token')
+export class Token extends CommonField implements IToken {
     @Column('varchar')
         accessToken:string;
+
+    @CreateDateColumn({
+        type: 'timestamp',
+        nullable: false,
+    })
+        registration_timestamp: string;
 }

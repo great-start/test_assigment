@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 import { UploadedFile } from 'express-fileupload';
 
 import { appDataSource } from '../data-source';
-import { Token, Users } from '../entity';
+import { Positions, Token, Users } from '../entity';
 import { ErrorHandler } from '../error';
 import { fileService, userService } from '../services';
 
@@ -54,11 +54,36 @@ class UserController {
         try {
             const { id } = req.params;
 
-            const user = await appDataSource.createQueryBuilder()
-                .select(['user.id', 'user.name', 'user.email', 'user.phone', 'user.position_id'])
-                .from(Users, 'user')
-                .where('user.id = :id', { id })
-                .getOne();
+            // const [user] = await appDataSource.getRepository(Users)
+            //     .query(`SELECT * FROM users JOIN positions ON users.position_id = positions.id WHERE users.id = $1;`, [id]);
+
+            // const user = await appDataSource.getRepository(Users).createQueryBuilder('user')
+            //     // .select()
+            //     // .from(Users, 'user')
+            //     .leftJoinAndSelect(Positions, 'position', 'position.id = user.position_id')
+            //     .where('user.id = :id', { id })
+            //     .getOne();
+
+            // const user = await appDataSource.getRepository(Users).createQueryBuilder('user')
+            //     .select(
+            //     ['user.id', 'user.name', 'user.email', 'user.phone', 'user.position_id', 'position.name'])
+            //     .leftJoin('user.position_id', 'position')
+            //     .where('user.id = :id', { id })
+            //
+            //     // .from(Users, 'user')
+            //     .getOne();
+
+            const [user] = await appDataSource.createQueryBuilder(Users, 'u')
+                .leftJoinAndSelect(Positions, 'p', 'p.id = u.positionId')
+                .where('u.id = :id', { id })
+                .select('u.id', 'id')
+                .addSelect('u.name', 'name')
+                .addSelect('u.email', 'email')
+                .addSelect('u.phone', 'phone')
+                .addSelect('p.name', 'position')
+                .addSelect('u.positionId', 'position_id')
+                .addSelect('u.photo', 'photo')
+                .getRawMany();
 
             if (!user) {
                 const fails = {
@@ -79,8 +104,8 @@ class UserController {
                 success: true,
                 user,
             });
-        } catch (e) {
-            next(e);
+        } catch (e: any) {
+            next(new ErrorHandler(e.message));
         }
     }
 }

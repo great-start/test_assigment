@@ -1,11 +1,11 @@
 import { Entity, PrimaryGeneratedColumn } from 'typeorm';
 
-export interface ICommonFields {
+export interface ICommonField {
     id: number
 }
 
 @Entity()
-export class CommonFields implements ICommonFields {
+export class CommonField implements ICommonField {
     @PrimaryGeneratedColumn()
         id: number;
 }

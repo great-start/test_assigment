@@ -7,7 +7,6 @@ import { ErrorHandler } from '../error';
 class FilesMiddleware {
     async checkFile(req: Request, res: Response, next: NextFunction) {
         try {
-            console.log(req.files?.photo);
 
             if (!req.files?.photo) {
                 next(new ErrorHandler('No file', false, 422));

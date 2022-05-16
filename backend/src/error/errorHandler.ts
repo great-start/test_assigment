@@ -7,7 +7,12 @@ export class ErrorHandler extends Error {
 
     fails?: {};
 
-    constructor(message: string, success: boolean = false, status: number = 400, fails: object = {}) {
+    constructor(
+        message: string,
+        success: boolean = false,
+        status: number = 400,
+        fails: object = {},
+    ) {
         super(message);
         this.success = success;
         this.status = status;

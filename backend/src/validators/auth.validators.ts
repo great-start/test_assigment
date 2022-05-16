@@ -36,7 +36,7 @@ export const authValidator = Joi.object({
             'any.required': 'Phone is a required field',
         })
         .trim(),
-    position_id: Joi.number()
+    positionId: Joi.number()
         .required()
         .min(1)
         .max(4)

@@ -34,8 +34,8 @@ class AuthMiddleware {
             });
 
             next();
-        } catch (e) {
-            next(e);
+        } catch (e: any) {
+            next(new ErrorHandler(e.message));
         }
     }
 
@@ -43,12 +43,12 @@ class AuthMiddleware {
         try {
             const {
                 // eslint-disable-next-line camelcase
-                name, email, phone, position_id,
+                name, email, phone, positionId,
             } = req.body;
 
             const { error } = authValidator.validate({
                 // eslint-disable-next-line camelcase
-                name, email, phone, position_id,
+                name, email, phone, positionId,
             });
 
             if (error) {

@@ -1,18 +1,21 @@
-import { Column, CreateDateColumn, Entity } from 'typeorm';
+import {
+    Column, CreateDateColumn, Entity, ManyToOne, JoinColumn,
+} from 'typeorm';
 
-import { CommonFields, ICommonFields } from './CommonFields';
+import { CommonField, ICommonField } from './CommonField';
+import { Positions } from './Positions';
 
-export interface IUser extends ICommonFields {
+export interface IUser extends ICommonField {
     name: string,
     email: string,
     phone: string,
-    position_id: number,
     photo: string,
+    positionId: number;
     registration_timestamp: string
 }
 
-@Entity()
-export class Users extends CommonFields implements IUser {
+@Entity('users')
+export class Users extends CommonField implements IUser {
     @Column('varchar', {
         length: 100,
     })
@@ -24,9 +27,6 @@ export class Users extends CommonFields implements IUser {
     @Column('varchar')
         phone: string;
 
-    @Column('int')
-        position_id: number;
-
     @Column('varchar')
         photo: string;
 
@@ -35,4 +35,11 @@ export class Users extends CommonFields implements IUser {
         nullable: false,
     })
         registration_timestamp: string;
+
+    @Column('int')
+        positionId: number;
+
+    @ManyToOne(() => Positions, (position) => position.id)
+    @JoinColumn({ name: 'positionId' })
+        position: Positions;
 }
