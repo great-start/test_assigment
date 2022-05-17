@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 
 import { appDataSource } from '../data-source';
 import { Token } from '../entity';
-import { tokenService } from '../services/token.service';
+import { tokenService } from '../services';
 
 class TokenController {
     public async getToken(req: Request, res: Response) {

@@ -1,4 +1,5 @@
 import { Router } from 'express';
+
 import { positionController } from '../controllers';
 
 const router = Router();

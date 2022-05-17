@@ -2,17 +2,15 @@ import React, {useEffect, useState} from 'react';
 
 import {userService} from '../services';
 
-const Positions = () => {
+export const Positions = () => {
 
     const [positions, setPositions] = useState(null);
 
     useEffect(() => {
-
         async function load() {
             const response = await userService.positions();
             setPositions(response.data.positions);
         }
-
         load();
     },[])
 
@@ -22,5 +20,3 @@ const Positions = () => {
         </div>
     );
 };
-
-export default Positions;

@@ -9,8 +9,7 @@ class UserMiddleware {
         try {
             const { email, phone } = req.body;
 
-            const userFromDB = await appDataSource
-                .createQueryBuilder()
+            const userFromDB = await appDataSource.createQueryBuilder()
                 .select('user')
                 .from(Users, 'user')
                 .where('user.email = :email OR user.phone = :phone', { email, phone })
@@ -21,10 +20,9 @@ class UserMiddleware {
                 return;
             }
 
-            // req.user = userFromDB;
             next();
         } catch (e: any) {
-            next(new ErrorHandler(e.message));
+            next(e);
         }
     }
 }

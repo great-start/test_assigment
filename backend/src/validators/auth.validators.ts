@@ -13,7 +13,7 @@ export const authValidator = Joi.object({
             'string.base': 'name should be a type of text',
             'string.empty': 'name cannot be an empty field',
             'string.min': 'name should have a minimum length of {#limit}',
-            'string.max': 'name should have a minimum length of {#limit}',
+            'string.max': 'name should have a maximum length of {#limit}',
             'any.required': 'name is a required field',
         }),
     email: Joi.string()
@@ -23,17 +23,19 @@ export const authValidator = Joi.object({
         .regex(new RegExp(emailPattern))
         .messages({
             'string.min': 'Email should have a minimum length of {#limit}',
-            'string.max': 'Email should have a minimum length of {#limit}',
+            'string.max': 'Email should have a maximum length of {#limit}',
             'string.pattern.base': 'The email must be a valid email address.',
             'any.required': 'Email is a required field',
+            'string.empty': 'Email not allowed to be empty',
         })
         .trim(),
     phone: Joi.string()
         .required()
         .regex(new RegExp(phonePattern))
         .messages({
-            'string.pattern.base': 'The phone field is required.',
+            'string.pattern.base': 'Phone field is required.',
             'any.required': 'Phone is a required field',
+            'string.empty': 'Phone not allowed to be empty',
         })
         .trim(),
     positionId: Joi.number()
@@ -41,8 +43,9 @@ export const authValidator = Joi.object({
         .min(1)
         .max(4)
         .messages({
-            'string.min': 'Email should have a minimum length of {#limit}',
-            'string.max': 'Email should have a minimum length of {#limit}',
-            'any:require': 'The position id must be an integer.',
+            'number.min': 'Position_id should have a minimum length of {#limit}',
+            'number.max': 'Position_id should have a maximum length of {#limit}',
+            'any.required': 'The position field is required.',
+            'number.base': 'The position field must be a type of number',
         }),
 });

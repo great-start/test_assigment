@@ -6,6 +6,7 @@ class PositionService {
     public getAllPositions() {
         try {
             return appDataSource.getRepository(Positions).find();
+
         } catch (e: any) {
             return new ErrorHandler(e.message);
         }

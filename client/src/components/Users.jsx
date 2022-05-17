@@ -1,5 +1,6 @@
 import {useForm} from 'react-hook-form';
 import {useState} from 'react';
+
 import {userService} from '../services';
 
 export const Users = () => {
@@ -7,7 +8,8 @@ export const Users = () => {
     const {reset, handleSubmit, register} = useForm();
     const [message, setMessage] = useState(null);
     const [users, setUsers] = useState(null);
-    const [page, setPage] = useState(1);
+    const [num, setNum] = useState(1);
+    let [disable, setDisable] = useState(null);
 
     const submit = async (user) => {
 
@@ -23,19 +25,38 @@ export const Users = () => {
         try {
             const response = await userService.create(accessToken, formData);
             setMessage(response.data.message);
+            reset()
         } catch (err) {
-            setMessage(err.response.data.message);
+            setMessage(err.response.data.message) || setMessage(err.response.data.fails.message);
         }
 
-        reset()
     };
 
     const showUsers = async () => {
-        const response = await userService.getUsersList(page);
-        setPage(page + 1);
+        const response = await userService.getUsersList(num);
         setUsers(response.data.users);
+
+        if (response.data.page === response.data.total_pages) {
+            disable = true;
+            setDisable(disable);
+            setNum(num - 1);
+            return;
+        }
+        setNum(num + 1);
     }
 
+    const showUsersBack = async () => {
+        const response = await userService.getUsersList(num);
+        setUsers(response.data.users);
+
+        if (response.data.page === 1) {
+            disable = false;
+            setDisable(disable);
+            setNum(num + 1);
+            return;
+        }
+        setNum(num - 1);
+    }
 
     return (
         <div>
@@ -48,21 +69,25 @@ export const Users = () => {
                 <button>Create</button>
             </form>
             <br/>
-            <p>{message && message}</p>
+            <p style={{color:'darkcyan'}}>{message && message}</p>
             <br/>
-            <button onClick={showUsers}>Показать еще</button>
+            <hr/>
+            <p>Показать пользователей - request /users?page={}&count=6</p>
+            <button disabled={!disable} onClick={showUsersBack}>Страница назад</button>
+            <button disabled={disable} onClick={showUsers}>Страница вперед</button>
             <div style={{display:'flex'}}>{users && users.map(user =>
             <div>
-                    <p>id: {user.id}</p>
-                    <p>name: {user.name}</p>
-                    <p>email: {user.email}</p>
-                    <p>phone: {user.phone}</p>
-                    <p>position: {user.position}</p>
-                    <p>position_id: {user.position_id}</p>
-                    <p>registration_timestamp: {user.registration_timestamp}</p>,
-                    <p>photo: {user.photo}</p>
+                    <p><b>id:</b> {user.id}</p>
+                    <p><b>name:</b> {user.name}</p>
+                    <p><b>email:</b> {user.email}</p>
+                    <p><b>phone:</b> {user.phone}</p>
+                    <p><b>position:</b> {user.position}</p>
+                    <p><b>position_id:</b> {user.position_id}</p>
+                    <p><b>registration_timestamp:</b> {user.registration_timestamp}</p>,
+                    <p><b>photo:</b> {user.photo}</p>
                 </div>)}
             </div>
+            <hr/>
         </div>
     );
 };

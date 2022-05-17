@@ -8,7 +8,6 @@ import { apiRouter } from './routes';
 const app: express.Application = express();
 
 app.use(express.json({}));
-app.use(express.static('images'));
 app.use(express.urlencoded({ extended: true }));
 app.use(fileUpload({ uploadTimeout: 10 }));
 app.use(apiRouter);
@@ -41,9 +40,11 @@ app.listen(config.PORT, async () => {
     try {
         await appDataSource.initialize();
         await appDataSource.runMigrations();
+
         console.log('Data Source has been initialized!');
+        console.log(`Server start at PORT ${config.PORT}!!!!!`);
+
     } catch (e) {
         console.error('Error during Data Source initialization:', e);
     }
-    console.log(`Server start at PORT ${config.PORT}!!!!!`);
 });

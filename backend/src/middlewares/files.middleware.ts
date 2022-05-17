@@ -27,7 +27,7 @@ class FilesMiddleware {
 
             next();
         } catch (e: any) {
-            next(new ErrorHandler(e.message));
+            next(e);
         }
     }
 }

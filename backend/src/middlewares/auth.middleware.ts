@@ -14,6 +14,7 @@ class AuthMiddleware {
 
             if (!token) {
                 next(new ErrorHandler('No token'));
+                return;
             }
 
             const tokenFromDB = await appDataSource.createQueryBuilder()
@@ -25,39 +26,41 @@ class AuthMiddleware {
 
             if (!tokenFromDB) {
                 next(new ErrorHandler('Token not valid', false, 401));
+                return;
             }
 
-            jwt.verify(token as string, config.SECRET_KEY as string, (e) => {
+            jwt.verify(token as string, config.SECRET_KEY as string, (e: any) => {
                 if (e) {
                     next(new ErrorHandler('The token expired.', false, 401));
+                    return;
                 }
             });
 
             next();
         } catch (e: any) {
-            next(new ErrorHandler(e.message));
+            next(e);
         }
     }
 
     public loginValidate(req: Request, res: Response, next: NextFunction) {
         try {
-            const {
-                // eslint-disable-next-line camelcase
-                name, email, phone, positionId,
-            } = req.body;
+            const { name, email, phone, positionId } = req.body;
 
-            const { error } = authValidator.validate({
-                // eslint-disable-next-line camelcase
-                name, email, phone, positionId,
-            });
+            const { error } = authValidator.validate({ name, email, phone, positionId });
 
             if (error) {
-                next(new ErrorHandler(error.details[0].message));
+                next(new ErrorHandler('Validation failed', false, 422,
+                        {
+                            message: error.details[0].message
+                        }
+                    )
+                );
+                return;
             }
 
             next();
         } catch (e: any) {
-            next(new ErrorHandler(e.message));
+            next(e);
         }
     }
 }

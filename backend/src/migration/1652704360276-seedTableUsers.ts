@@ -32,15 +32,23 @@ export class seedTableUsers1652704360276 implements MigrationInterface {
                 ('Kolya','a26@gmail.com','+380501234532','/asd/photo.jpeg',2),
                 ('Vanya','a27@gmail.com','+380501234533','/asd/photo.jpeg',2),
                 ('Vanya','a28@gmail.com','+380501234534','/asd/photo.jpeg',2),
-                ('Nikolay','a29@gmail.com','+380501234535','/asd/photo.jpeg',2),
+                ('Nikolay','a29@gmail.com','+380501234535','/asd/photo.jpeg',4),
                 ('Vanya','a30@gmail.com','+380501234536','/asd/photo.jpeg',2),
-                ('Vanya','a31@gmail.com','+380501234537','/asd/photo.jpeg',2),
+                ('Vanya','a31@gmail.com','+380501234537','/asd/photo.jpeg',3),
                 ('Anatoliy','a32@gmail.com','+380501234538','/asd/photo.jpeg',2),
-                ('Vanya','a33@gmail.com','+380501234540','/asd/photo.jpeg',2),
+                ('Vanya','a33@gmail.com','+380501234540','/asd/photo.jpeg',4),
                 ('Vanya','a34@gmail.com','+380501234541','/asd/photo.jpeg',2),
                 ('Vasilisa','a35@gmail.com','+380501234542','/asd/photo.jpeg',2),
-                ('Vanya','a36@gmail.com','+380501234543','/asd/photo.jpeg',2),
+                ('Vanya','a36@gmail.com','+380501234543','/asd/photo.jpeg',3),
                 ('Kolya','a37@gmail.com','+380501234544','/asd/photo.jpeg',2),
+                ('Kolya','aasd@gmail.com','+380501234545','/asd/photo.jpeg',2),
+                ('Vasilisa','dsd@gmail.com','+380501234546','/asd/photo.jpeg',2),
+                ('Kolya','ertet@gmail.com','+380501234547','/asd/photo.jpeg',1),
+                ('Kolya','jukilo@gmail.com','+380501234548','/asd/photo.jpeg',2),
+                ('Vasilisa','bnmjhg@gmail.com','+380501234549','/asd/photo.jpeg',1),
+                ('Kolya','avbggerd@gmail.com','+380501234550','/asd/photo.jpeg',2),
+                ('Kolya','acdvfbgnhn@gmail.com','+380501234551','/asd/photo.jpeg',3),
+                ('Vasilisa','aecrthbnmo@gmail.com','+380501234552','/asd/photo.jpeg',1);
         `);
     }
 

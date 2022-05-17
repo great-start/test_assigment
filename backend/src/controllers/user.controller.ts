@@ -11,17 +11,13 @@ class UserController {
         try {
             const { page, count } = req.query;
 
-            const { protocol } = req;
-            const host = req.hostname;
-            const port = process.env.PORT;
+            const originalURL = req.get('Referrer') as string;
 
-            const fullUrl = `${protocol}://${host}:${port}`;
-
-            const data = await userService.getUserPagination(fullUrl, Number(page), Number(count));
+            const data = await userService.getUserPagination(originalURL, Number(page), Number(count));
 
             res.json(data);
         } catch (e: any) {
-            next(new ErrorHandler(e.message));
+            next(e);
         }
     }
 
@@ -36,6 +32,7 @@ class UserController {
                 .into(Users)
                 .values([userToSave])
                 .execute();
+
 
             // delete Token from DB after registration
             const token = req.get('Token');
@@ -52,7 +49,7 @@ class UserController {
                 message: 'New user successfully registered',
             });
         } catch (e: any) {
-            next(new ErrorHandler(e.message));
+            next(e);
         }
     }
 
@@ -61,33 +58,16 @@ class UserController {
             const { id } = req.params;
 
             if (!Number(id)) {
-                const fails = {
-                    user_id: [
-                        'The user_id must be an integer.',
-                    ],
-                };
-                next(new ErrorHandler('Validation failed', false, 400, fails));
+                next(new ErrorHandler('Validation failed', false, 400,
+                        {
+                            user_id: [
+                                'The user_id must be an integer.',
+                            ]
+                        }
+                    )
+                );
                 return;
             }
-
-            // const [user] = await appDataSource.getRepository(Users)
-            //     .query(`SELECT * FROM users JOIN positions ON users.position_id = positions.id WHERE users.id = $1;`, [id]);
-
-            // const user = await appDataSource.getRepository(Users).createQueryBuilder('user')
-            //     // .select()
-            //     // .from(Users, 'user')
-            //     .leftJoinAndSelect(Positions, 'position', 'position.id = user.position_id')
-            //     .where('user.id = :id', { id })
-            //     .getOne();
-
-            // const user = await appDataSource.getRepository(Users).createQueryBuilder('user')
-            //     .select(
-            //     ['user.id', 'user.name', 'user.email', 'user.phone', 'user.position_id', 'position.name'])
-            //     .leftJoin('user.position_id', 'position')
-            //     .where('user.id = :id', { id })
-            //
-            //     // .from(Users, 'user')
-            //     .getOne();
 
             const [user] = await appDataSource.createQueryBuilder(Users, 'u')
                 .leftJoinAndSelect(Positions, 'p', 'p.id = u.positionId')
@@ -102,16 +82,13 @@ class UserController {
                 .getRawMany();
 
             if (!user) {
-                const fails = {
-                    user_id: [
-                        'User not found',
-                    ],
-                };
-                next(new ErrorHandler(
-                    'The user with the requested identifier does not exist',
-                    false,
+                next(new ErrorHandler('The user with the requested identifier does not exist', false,
                     400,
-                    fails,
+                    {
+                        user_id: [
+                            'User not found',
+                        ],
+                    },
                 ));
                 return;
             }
@@ -121,7 +98,7 @@ class UserController {
                 user,
             });
         } catch (e: any) {
-            next(new ErrorHandler(e.message));
+            next(e);
         }
     }
 }
