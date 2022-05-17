@@ -1,7 +1,7 @@
 import express, { Request, Response } from 'express';
 import fileUpload from 'express-fileupload';
-import { appDataSource } from './data-source';
 
+import { appDataSource } from './data-source';
 import { config } from './config';
 import { apiRouter } from './routes';
 
@@ -40,6 +40,7 @@ app.use('*', (err, req, res, next) => {
 app.listen(config.PORT, async () => {
     try {
         await appDataSource.initialize();
+        await appDataSource.runMigrations();
         console.log('Data Source has been initialized!');
     } catch (e) {
         console.error('Error during Data Source initialization:', e);

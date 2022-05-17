@@ -8,8 +8,7 @@ import { filesMiddleware } from '../middlewares/files.middleware';
 const router = Router();
 
 router.get('/', userController.getUserPagination);
-router.post(
-    '/',
+router.post('/',
     authMiddleware.checkAccessToken,
     authMiddleware.loginValidate,
     userMiddleware.checkIsUserExist,

@@ -11,7 +11,13 @@ class UserController {
         try {
             const { page, count } = req.query;
 
-            const data = await userService.getUserPagination(Number(page), Number(count));
+            const { protocol } = req;
+            const host = req.hostname;
+            const port = process.env.PORT;
+
+            const fullUrl = `${protocol}://${host}:${port}`;
+
+            const data = await userService.getUserPagination(fullUrl, Number(page), Number(count));
 
             res.json(data);
         } catch (e: any) {
@@ -54,6 +60,16 @@ class UserController {
         try {
             const { id } = req.params;
 
+            if (!Number(id)) {
+                const fails = {
+                    user_id: [
+                        'The user_id must be an integer.',
+                    ],
+                };
+                next(new ErrorHandler('Validation failed', false, 400, fails));
+                return;
+            }
+
             // const [user] = await appDataSource.getRepository(Users)
             //     .query(`SELECT * FROM users JOIN positions ON users.position_id = positions.id WHERE users.id = $1;`, [id]);
 
@@ -88,7 +104,7 @@ class UserController {
             if (!user) {
                 const fails = {
                     user_id: [
-                        'The user_id must be an integer.',
+                        'User not found',
                     ],
                 };
                 next(new ErrorHandler(

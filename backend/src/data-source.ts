@@ -12,7 +12,7 @@ export const appDataSource = new DataSource({
     password: config.DB_PASSWORD,
     database: config.DATABASE,
     synchronize: true,
-    logging: false,
+    logging: true,
     entities: [Users, Token, Positions],
     // subscribers: [],
     migrations: ['src/migration/*.{js,ts}'],

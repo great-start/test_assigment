@@ -1,5 +1,5 @@
 export const config = {
-    PORT: process.env.PORT || 5200,
+    PORT: process.env.PORT || 5000,
 
     DB_PORT: Number(process.env.DB_PORT),
     DB_HOST: process.env.DB_HOST,

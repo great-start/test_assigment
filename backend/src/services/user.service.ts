@@ -1,3 +1,4 @@
+
 import { Users } from '../entity';
 import { appDataSource } from '../data-source';
 import { ErrorHandler } from '../error';
@@ -5,7 +6,7 @@ import { ErrorHandler } from '../error';
 const userRepository = appDataSource.getRepository(Users);
 
 class UserService {
-    public async getUserPagination(page = 1, perPage = 5) {
+    public async getUserPagination(url: string, page: number = 1, perPage: number = 6) {
         try {
             const [users, count] = await userRepository.findAndCount({
                 skip: perPage * (page - 1),
@@ -15,7 +16,7 @@ class UserService {
             // eslint-disable-next-line camelcase
             const total_pages = Math.ceil(count / perPage);
 
-            let next_url = `https://frontend-test-assignment-api.abz.agency/api/v1/users?page=${page + 1}&count=${count}`;
+            let next_url = `${url}/users?page=${page + 1}&count=${count}`;
             let prev_url = null;
 
             if (total_pages === page) {
@@ -24,7 +25,7 @@ class UserService {
             }
 
             if (total_pages !== 0) {
-                prev_url = `https://frontend-test-assignment-api.abz.agency/api/v1/users?page=${page - 1}&count=${count}`;
+                prev_url = `${url}/users?page=${page - 1}&count=${count}`;
             }
 
             if (page === 1) {
